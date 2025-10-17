@@ -71,6 +71,7 @@ export const Dashboard = () => {
   const { data, addWidget, removeWidget } = useDashboardStore();
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [selectedSectionId, setSelectedSectionId] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const handleAddWidget = (sectionId: string) => {
     setSelectedSectionId(sectionId);
@@ -88,12 +89,34 @@ export const Dashboard = () => {
     setSelectedSectionId(null);
   };
 
+  const filteredSections = data.sections.map(section => {
+    if (!searchQuery.trim()) {
+      return section;
+    }
+
+    const query = searchQuery.toLowerCase();
+    const filteredWidgets = section.widgets.filter(widget =>
+      widget.name.toLowerCase().includes(query) ||
+      widget.text.toLowerCase().includes(query) ||
+      widget.category.toLowerCase().includes(query)
+    );
+
+    return {
+      ...section,
+      widgets: filteredWidgets
+    };
+  }).filter(section => section.widgets.length > 0 || !searchQuery.trim());
+
   return (
     <div className="min-h-screen bg-background">
-      <DashboardHeader onAddWidget={() => setIsAddModalOpen(true)} />
+      <DashboardHeader
+        onAddWidget={() => setIsAddModalOpen(true)}
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+      />
 
       <main className="px-6 py-6 space-y-8">
-        {data.sections.map((section) => (
+        {filteredSections.map((section) => (
           <DashboardSection
             key={section.id}
             section={section}
@@ -101,6 +124,11 @@ export const Dashboard = () => {
             onAddWidget={handleAddWidget}
           />
         ))}
+        {searchQuery.trim() && filteredSections.every(s => s.widgets.length === 0) && (
+          <div className="text-center py-12 text-muted-foreground">
+            No widgets found matching "{searchQuery}"
+          </div>
+        )}
       </main>
 
       <AddWidgetModal

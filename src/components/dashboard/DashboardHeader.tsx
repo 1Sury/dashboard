@@ -4,9 +4,11 @@ import { Input } from '@/components/ui/input';
 
 interface DashboardHeaderProps {
   onAddWidget: () => void;
+  searchQuery: string;
+  onSearchChange: (query: string) => void;
 }
 
-export const DashboardHeader = ({ onAddWidget }: DashboardHeaderProps) => {
+export const DashboardHeader = ({ onAddWidget, searchQuery, onSearchChange }: DashboardHeaderProps) => {
   return (
     <header className="border-b border-widget-border bg-transparent px-6 py-4">
      <div className="flex items-center justify-between bg-white p-4">
@@ -22,6 +24,8 @@ export const DashboardHeader = ({ onAddWidget }: DashboardHeaderProps) => {
       <Input
         placeholder="Search anything..."
         className="w-64 pl-10"
+        value={searchQuery}
+        onChange={(e) => onSearchChange(e.target.value)}
       />
     </div>
   </div>
