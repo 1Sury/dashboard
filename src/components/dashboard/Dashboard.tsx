@@ -57,6 +57,16 @@ const availableWidgets: { [key: string]: Omit<Widget, 'id'>[] } = {
   ]
 };
 
+const getCategoryFromSectionId = (sectionId: string): string => {
+  const mapping: { [key: string]: string } = {
+    'cspm': 'CSPM',
+    'cwpp': 'CWPP',
+    'registry': 'Image',
+    'ticket': 'Ticket'
+  };
+  return mapping[sectionId] || 'CSPM';
+};
+
 export const Dashboard = () => {
   const { data, addWidget, removeWidget } = useDashboardStore();
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -81,7 +91,7 @@ export const Dashboard = () => {
   return (
     <div className="min-h-screen bg-background">
       <DashboardHeader onAddWidget={() => setIsAddModalOpen(true)} />
-      
+
       <main className="px-6 py-6 space-y-8">
         {data.sections.map((section) => (
           <DashboardSection
@@ -97,7 +107,7 @@ export const Dashboard = () => {
         open={isAddModalOpen}
         onClose={handleCloseModal}
         onAddWidget={handleModalAddWidget}
-        availableWidgets={availableWidgets}
+        initialCategory={selectedSectionId ? getCategoryFromSectionId(selectedSectionId) : undefined}
       />
     </div>
   );

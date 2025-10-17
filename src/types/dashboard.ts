@@ -3,6 +3,7 @@ export interface Widget {
   name: string;
   text: string;
   category: 'CSPM' | 'CWPP' | 'Image' | 'Ticket';
+  widgetType?: 'cloud-accounts' | 'risk-assessment' | 'image-risk' | 'image-security' | 'cwpp-custom' | 'custom';
   data?: ChartWidgetData;
 }
 
