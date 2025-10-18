@@ -107,10 +107,15 @@ export const Dashboard = () => {
     };
   }).filter(section => section.widgets.length > 0 || !searchQuery.trim());
 
+  const handleHeaderAddWidget = () => {
+    setSelectedSectionId('cspm');
+    setIsAddModalOpen(true);
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <DashboardHeader
-        onAddWidget={() => setIsAddModalOpen(true)}
+        onAddWidget={handleHeaderAddWidget}
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
       />
