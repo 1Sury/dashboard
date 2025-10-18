@@ -67,6 +67,16 @@ const getCategoryFromSectionId = (sectionId: string): string => {
   return mapping[sectionId] || 'CSPM';
 };
 
+const getSectionIdFromCategory = (category: string): string => {
+  const mapping: { [key: string]: string } = {
+    'CSPM': 'cspm',
+    'CWPP': 'cwpp',
+    'Image': 'registry',
+    'Ticket': 'ticket'
+  };
+  return mapping[category] || 'cspm';
+};
+
 export const Dashboard = () => {
   const { data, addWidget, removeWidget } = useDashboardStore();
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -79,9 +89,8 @@ export const Dashboard = () => {
   };
 
   const handleModalAddWidget = (widget: Omit<Widget, 'id'>) => {
-    if (selectedSectionId) {
-      addWidget(selectedSectionId, widget);
-    }
+    const targetSectionId = getSectionIdFromCategory(widget.category);
+    addWidget(targetSectionId, widget);
   };
 
   const handleCloseModal = () => {
